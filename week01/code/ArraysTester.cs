@@ -1,8 +1,10 @@
-public static class ArraysTester {
+public static class ArraysTester
+{
     /// <summary>
     /// Entry point for the tests
     /// </summary>
-    public static void Run() {
+    public static void Run()
+    {
         // Sample Test Cases (may not be comprehensive)
         Console.WriteLine("\n=========== PROBLEM 1 TESTS ===========");
         double[] multiples = MultiplesOf(7, 5);
@@ -34,14 +36,25 @@ public static class ArraysTester {
     /// <returns>array of doubles that are the multiples of the supplied number</returns>
     private static double[] MultiplesOf(double number, int length)
     {
+
         // TODO Problem 1 Start
         // Remember: Using comments in your program, write down your process for solving this problem
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
 
-        return new double[0]; // replace this return statement with your own
+        // Create an array of doubles with the length of the input
+        double[] multiples = new double[length];
+
+        // Loop through the array and set each value to the number times the index + 1
+        for (int i = 0; i < length; i++)
+        {
+            // Set the value of the array at the index to the number times the index + 1
+            multiples[i] = number * (i + 1);
+        }
+        // Return the array
+        return multiples;
     }
-    
+
     /// <summary>
     /// Rotate the 'data' to the right by the 'amount'.  For example, if the data is 
     /// <c>&lt;List&gt;{1, 2, 3, 4, 5, 6, 7, 8, 9}</c> and an amount is 3 then the list returned should be 
@@ -57,5 +70,26 @@ public static class ArraysTester {
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
 
+        // Check if amount is greater than the length of the list or if the list is empty
+        if (amount >= data.Count || data.Count == 0)
+        {
+            // If so, no rotation is needed, return without modifying the list
+            return;
+        }
+
+        // Create a temporary list to hold the values that will be moved
+        List<int> temp = new List<int>();
+
+        // Loop through the list and add the last 'amount' values to the temp list
+        for (int i = 0; i < amount; i++)
+        {
+            // Add the last value of the list to the temp list
+            temp.Add(data[data.Count - 1]);
+            // Remove the last value from the list
+            data.RemoveAt(data.Count - 1);
+        }
+
+        // Insert the temp list at the beginning of the list
+        data.InsertRange(0, temp);
     }
 }
