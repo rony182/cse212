@@ -12,10 +12,10 @@
         players.AddPerson("Bob", 2);
         players.AddPerson("Tim", 5);
         players.AddPerson("Sue", 3);
-        // Console.WriteLine(players);    // This can be un-commented out for debug help
+        // Console.WriteLine(players.ToString());    // This can be un-commented out for debug help
         while (players.Length > 0)
             players.GetNextPerson();
-        // Defect(s) Found: 
+        // Defect(s) Found: The problem was that the queue was adding the people in the wrong order
 
         Console.WriteLine("---------");
 
