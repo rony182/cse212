@@ -111,6 +111,40 @@ public static class SetsAndMapsTester {
         // To display the pair correctly use something like:
         // Console.WriteLine($"{word} & {pair}");
         // Each pair of words should displayed on its own line.
+        // Todo Problem 1 - ADD YOUR CODE HERE
+
+        // Create a set to store the pairs of words that have already been processed
+        HashSet<string> processedPairs = new HashSet<string>();
+        // Iterate through the list of words
+        foreach (string word in words) {
+            // Reverse the word
+            char[] charArray = word.ToCharArray();
+            Array.Reverse(charArray);
+            // Create a new string from the reversed character array
+            string reversedWord = new string(charArray);
+
+            // Sort the pair of words and create a key to check if it's already been processed
+            string[] pair = new string[] { word, reversedWord };
+            // Sort the pair of words
+            Array.Sort(pair);
+            // Create a key from the sorted pair
+            string pairKey = pair[0] + "&" + pair[1];
+
+            // Check if the pair has already been processed
+            if (!processedPairs.Contains(pairKey)) {
+                // Check if the word is its own reverse and there's more than one occurrence of it
+                bool isPalindrome = word.Equals(reversedWord);
+                // Count the occurrences of the word in the list
+                int occurrences = Array.FindAll(words, w => w.Equals(word)).Length;
+                // If it's a palindrome and there's more than one occurrence of it, or if it's not a palindrome and its reverse is in the list
+                if ((isPalindrome && occurrences > 1) || (!isPalindrome && Array.IndexOf(words, reversedWord) > -1)) {
+                    // Display the pair
+                    Console.WriteLine($"{reversedWord} & {word}");
+                    // Add the pair to the set of processed pairs
+                    processedPairs.Add(pairKey);
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -128,10 +162,21 @@ public static class SetsAndMapsTester {
     /// # Problem 2 #
     /// #############
     private static Dictionary<string, int> SummarizeDegrees(string filename) {
+        // create a dictionary to store the degrees and their counts
         var degrees = new Dictionary<string, int>();
+        // iterate through the file
         foreach (var line in File.ReadLines(filename)) {
+            // split the line into fields
             var fields = line.Split(",");
-            // Todo Problem 2 - ADD YOUR CODE HERE
+            // get the degree from the 4th field
+            var degree = fields[3].Trim();
+            // if it is, increment the count
+            if (degrees.ContainsKey(degree)) {
+                degrees[degree]++;
+                // if it's not, add it to the dictionary
+            } else {
+                degrees[degree] = 1;
+            }
         }
 
         return degrees;
@@ -157,8 +202,46 @@ public static class SetsAndMapsTester {
     /// # Problem 3 #
     /// #############
     private static bool IsAnagram(string word1, string word2) {
-        // Todo Problem 3 - ADD YOUR CODE HERE
-        return false;
+        // Create a dictionary to store the counts of each letter in the first word
+        Dictionary<char, int> letterCounts = new Dictionary<char, int>();
+        // Iterate through the first word
+        foreach (char letter in word1.ToLower()) {
+            // If the letter is not a space
+            if (letter != ' ') {
+                // If the letter is already in the dictionary, increment its count
+                if (letterCounts.ContainsKey(letter)) {
+                    letterCounts[letter]++;
+                    // If the letter is not in the dictionary, add it with a count of 1
+                } else {
+                    letterCounts[letter] = 1;
+                }
+            }
+        }
+
+        // Iterate through the second word
+        foreach (char letter in word2.ToLower()) {
+            // If the letter is not a space
+            if (letter != ' ') {
+                // If the letter is already in the dictionary, decrement its count
+                if (letterCounts.ContainsKey(letter)) {
+                    letterCounts[letter]--;
+                    // If the letter is not in the dictionary, return false
+                } else {
+                    return false;
+                }
+            }
+        }
+
+        // Iterate through the dictionary
+        foreach (var letterCount in letterCounts) {
+            // If any letter has a count different than 0, return false
+            if (letterCount.Value != 0) {
+                return false;
+            }
+        }
+
+        // If all letters have a count of 0, return true
+        return true;
     }
 
     /// <summary>
@@ -230,10 +313,18 @@ public static class SetsAndMapsTester {
         var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         var featureCollection = JsonSerializer.Deserialize<FeatureCollection>(json, options);
-
+        
         // TODO:
         // 1. Add code in FeatureCollection.cs to describe the JSON using classes and properties 
         // on those classes so that the call to Deserialize above works properly.
         // 2. Add code below to print out each place a earthquake has happened today and its magitude.
+
+        if (featureCollection?.Features != null)
+        {
+            foreach (var feature in featureCollection.Features)
+            {
+                Console.WriteLine($"{feature.Properties.Place} - Mag {feature.Properties.Mag}");
+            }
+        }
     }
 }
